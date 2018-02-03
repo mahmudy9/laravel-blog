@@ -23,55 +23,8 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $posts = User::find(Auth::id())->posts()->orderBy('id' , 'desc')->paginate('1');
+        $posts = User::find(Auth::id())->posts()->where('approved' , '1')->orderBy('id' , 'desc')->paginate('5');
         return view('users.posts' , compact('posts') );
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function createPost()
-    {
-        return view('post.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function storePost(Request $request)
-    {
-        $validator = Validator::make($request->all() , [
-            'title' => 'required|max:255',
-            'category' => 'required|numeric',
-            'body' => 'required|min:100'
-        ]);
-        if($validator->fails())
-        {
-            return redirect()->back()
-            ->withErrors()
-            ->withInput();
-        }
-        $post = new Post;
-        $post->title = $request->input('title');
-        $post->user_id = Auth::id();
-        $post->category_id = $request->input('category');
-        $post->body = $request->input('body');
-        $post->save();
-        $slug = strtolower(str_replace( " " , "-" ,$post->title));
-        return redirect('post/show/'.$post->id."/".$slug);
-
-    }
-
-
-    public function showPost($id)
-    {
-        $post = Post::findOrFail($id);
-        return view('post.show' , compact('post') );
     }
 
     /**
@@ -82,13 +35,9 @@ class UsersController extends Controller
      */
     public function show()
     {
-        if(Auth::id())
-        {
             $id = Auth::id();
             $user = User::find($id);
         return view('users.profile' , [ 'user' => $user , 'id' => $id ] );
-        }
-        return abort(404);
 
     }
 
@@ -100,12 +49,8 @@ class UsersController extends Controller
      */
     public function edit()
     {
-        if(Auth::id())
-        {
             $user = User::find(Auth::id());
             return view('users.edit' , compact('user'));
-        }
-        return abort(404);
         
     }
 
@@ -118,8 +63,6 @@ class UsersController extends Controller
      */
     public function update(Request $request)
     {
-            if(Auth::id())
-            {
                 $id = Auth::id();
                 $validator = Validator::make($request->all() , [
                     'name' => 'required|min:3',
@@ -127,27 +70,15 @@ class UsersController extends Controller
                 ]);
                 if($validator->fails())
                 {
-                    return redirect()->back()->withErrors();
+                    return redirect()->back()->withErrors($vlidator);
                 }
                 $user = User::find($id);
                 $user->name = $request->input('name');
                 $user->email = $request->input('email');
                 $user->save();
                 return redirect()->back();
-            }
+    }
         
-        return abort(404);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $user = User::find($id);
-        $user->delete();
-    }
 }
+
+   

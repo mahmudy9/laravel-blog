@@ -9,7 +9,7 @@
 
             {!! clean($post->body) !!}
         </p>
-
+@include('comments')
     </div>
 @include('layouts.footer')
 

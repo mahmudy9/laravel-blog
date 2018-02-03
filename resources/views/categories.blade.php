@@ -10,6 +10,6 @@
         </li>
         @endforeach
     </ul>
-
+    <br>
 </div>
 @include('layouts.footer')

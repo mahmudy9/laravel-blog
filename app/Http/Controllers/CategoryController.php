@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Category;
 use App\Post;
+use App\User;
+use Validator;
+
 class CategoryController extends Controller
 {
     public function index()
@@ -21,7 +24,10 @@ class CategoryController extends Controller
     public function postsByCategory($category_name)
     {   
         $categoryid = Category::where('name' , $category_name)->firstOrFail();
-        $category = Category::find($categoryid->id);
-        return view('category_posts' , compact('category','category_name'));
+        $posts = Post::where('category_id', '=' , $categoryid->id)
+        ->where('approved' , '=' , '1')->orderBy('id' , 'desc')->paginate('5');
+        return view('category_posts' , compact('posts','category_name'));
     }
+
+
 }

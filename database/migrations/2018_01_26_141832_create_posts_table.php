@@ -19,6 +19,7 @@ class CreatePostsTable extends Migration
             $table->integer('category_id');
             $table->string('title');
             $table->text('body');
+            $table->tinyInteger('approved')->defaults('0');
             $table->timestamps();
         });
     }

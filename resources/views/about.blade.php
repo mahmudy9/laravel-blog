@@ -1,7 +1,10 @@
-@include('layouts.app')
+@include('layouts.header')
 <div class="container">
 <p>This is About</p>
 
-<textarea id="mytext"></textarea>
+
 
 </div>
+
+@include('layouts.footer')
+

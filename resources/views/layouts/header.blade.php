@@ -27,12 +27,48 @@
              toolbar2 :'bullist numlist outdent indent hr blockquote table tabledelete textcolor codesample code link unlink image source',
         });
     </script>
+    <style>
+            html {
+        position: relative;
+        min-height: 100%;
+      }
+      body {
+        /* Margin bottom by footer height */
+        margin-bottom: 60px;
+      }
+      .footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        /* Set the fixed height of the footer here */
+        height: 60px;
+        line-height: 60px; /* Vertically center the text there */
+        background-color: #f5f5f5;
+      }
 
+
+      /* Custom page CSS
+      -------------------------------------------------- */
+      /* Not required for template or sticky footer method. */
+
+      body > .container {
+        padding: 60px 15px 0;
+      }
+
+      .footer > .container {
+        padding-right: 15px;
+        padding-left: 15px;
+      }
+
+      code {
+        font-size: 80%;
+      }
+    </style>
 </head>
 <body>
 
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-      <a class="navbar-brand" href="{{ url('/') }}">Navbar</a>
+      <a class="navbar-brand" href="{{ url('/') }}">Blogger</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -45,6 +81,21 @@
           <li class="nav-item">
             <a class="nav-link" href="{{ url('categories') }}">Categories</a>
           </li>
+          @auth
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url('post/create') }}">Create Post</a>
+          </li>
+          <?php
+           $user = Auth::user();
+           ?>
+           @if($user->level != '0')
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url('/dashboard') }}">Dashboard</a>
+          </li>
+          @endif
+          @endauth
+
+
           <li class="nav-item">
             <a class="nav-link" href="{{ url('contact') }}">Contact</a>
           </li>
